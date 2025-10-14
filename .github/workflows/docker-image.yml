@@ -1,0 +1,41 @@
+name: Docker CI
+
+# Pemicu: Berjalan saat ada push ke branch 'main' ATAU saat sebuah tag 'vX.X.X' di-push
+on:
+  push:
+    branches: [ "main" ]
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Mengambil kode dari repositori
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Login ke Docker Hub menggunakan secrets
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      # 3. Membuat tag Docker secara otomatis berdasarkan pemicu
+      #    - Jika push ke 'main', tag akan berupa SHA (misal: a1b2c3d)
+      #    - Jika push tag 'v1.2.0', tag akan berupa 'v1.2.0' dan 'latest'
+      - name: Generate Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: fahmidl/app-sso
+
+      # 4. Membangun image dan mengunggahnya ke Docker Hub
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
