@@ -10,6 +10,20 @@
         p { font-size: 1.1em; }
         strong { color: #0078D4; }
         a { color: #d9534f; text-decoration: none; font-weight: bold; }
+        .button { 
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #d9534f;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px; /* Memberi sedikit jarak dari atas */
+        }
+        .button:hover {
+            background-color: #c9302c;
+        }
     </style>
 </head>
 <body>
@@ -22,7 +36,7 @@
         <p>Email: <strong>{{ user.email }}</strong></p>
         <p>ID dari Microsoft: <strong>{{ user.provider_id }}</strong></p>
         <br>
-        <a href="/logout">Logout</a>
+        <a href="/logout" class="button">Logout</a>
     </div>
 </body>
 </html>
