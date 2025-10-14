@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profil Pengguna</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; background-color: #f9f9f9; }
+        .profile-card { max-width: 600px; margin: auto; padding: 30px; background-color: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        p { font-size: 1.1em; }
+        strong { color: #0078D4; }
+        a { color: #d9534f; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="profile-card">
+        <h1>Profil Anda</h1>
+        <p>Selamat datang kembali, <strong>{{ user.name }}</strong>!</p>
+        <p>Data ini berhasil diambil dan disimpan di database lokal.</p>
+        <hr>
+        <p>ID Database: <strong>{{ user.id }}</strong></p>
+        <p>Email: <strong>{{ user.email }}</strong></p>
+        <p>ID dari Microsoft: <strong>{{ user.provider_id }}</strong></p>
+        <br>
+        <a href="/logout">Logout</a>
+    </div>
+</body>
+</html>

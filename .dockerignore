@@ -1,0 +1,22 @@
+# Folder virtual environment Python, sangat besar dan tidak dibutuhkan di dalam kontainer.
+venv/
+
+# Folder cache Python yang dibuat secara otomatis.
+__pycache__/
+*.pyc
+*.pyo
+
+# File environment yang berisi semua rahasia. JANGAN PERNAH masukkan ini ke image.
+.env
+
+# Folder dan file konfigurasi Git.
+.git/
+.gitignore
+
+# File database SQLite dari percobaan kita sebelumnya, sudah tidak terpakai.
+users.db
+
+# File Docker itu sendiri tidak perlu disalin ke dalam image.
+Dockerfile
+docker-compose.yml
+.dockerignore

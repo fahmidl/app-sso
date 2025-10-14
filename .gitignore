@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+*.env
+*.venv/
+venv/
+ENV/
+.env.*
+
+# VS Code
+.vscode/
+
+# Docker
+*.pid
+docker-compose.override.yml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Others
+*.bak
+*.swp
+*.tmp
+
+# Ignore compiled files
+*.so
+*.dll
+*.exe
+
+# Ignore entrypoint script backup
+entrypoint.sh.bak

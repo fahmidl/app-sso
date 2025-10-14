@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  # Service untuk aplikasi web Flask
+  webapp:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - db
+    # Perintah ini akan diteruskan ke 'exec "$@"' di dalam entrypoint.sh
+    command: ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
+
+  # Service untuk database PostgreSQL
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
