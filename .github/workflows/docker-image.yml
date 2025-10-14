@@ -30,6 +30,15 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: fahmidl/app-sso
+          tags: |
+            # Pemicu 1: Jika event adalah push sebuah tag (misal: v1.2.0)
+            # Maka buat dua tag: 'v1.2.0' dan 'latest'
+            type=ref,event=tag
+            type=raw,value=latest,enable=true
+
+            # Pemicu 2: Jika event adalah push ke branch 'main' (bukan tag)
+            # Maka buat satu tag unik berdasarkan ID commit
+            type=sha,enable=true,prefix=,format=short
 
       # 4. Membangun image dan mengunggahnya ke Docker Hub
       - name: Build and push Docker image
