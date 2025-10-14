@@ -3,11 +3,12 @@ version: '3.8'
 services:
   # Service untuk aplikasi web Flask
   webapp:
-    build: .
+    # build: . 
+    image: fahmidl/app-sso:latest
     ports:
       - "5000:5000"
-    volumes:
-      - .:/app
+    # volumes:
+    #   - .:/app
     env_file:
       - .env
     depends_on:
