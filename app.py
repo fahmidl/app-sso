@@ -51,6 +51,22 @@ oauth.register(
     }
 )
 
+# Konfigurasi untuk Login dengan Google (Versi Manual Penuh)
+oauth.register(
+    name='google',
+    client_id=os.getenv("GOOGLE_CLIENT_ID"),
+    client_secret=os.getenv("GOOGLE_CLIENT_SECRET"),
+    
+    authorize_url='https://accounts.google.com/o/oauth2/v2/auth',
+    access_token_url='https://oauth2.googleapis.com/token',
+    userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',
+    jwks_uri='https://www.googleapis.com/oauth2/v3/certs',
+
+    client_kwargs={
+        'scope': 'openid email profile'
+    }
+)
+
 # Halaman utama (login)
 @app.route('/')
 def index():
@@ -85,6 +101,43 @@ def authorize_microsoft():
         nonce=nonce,
         claims_options=claims_options
     )
+
+    if user_claims:
+        provider_id = user_claims['sub']
+        user = User.query.filter_by(provider_id=provider_id).first()
+
+        if not user:
+            new_user = User(
+                provider_id=provider_id,
+                name=user_claims.get('name', 'N/A'),
+                email=user_claims.get('email')
+            )
+            db.session.add(new_user)
+            db.session.commit()
+            user = new_user
+        
+        session['user_id'] = user.id
+
+    return redirect('/')
+
+# Rute untuk memicu proses login Google
+@app.route('/login/google')
+def login_google():
+    redirect_uri = url_for('authorize_google', _external=True)
+    # Buat dan simpan nonce di session
+    nonce = secrets.token_urlsafe(16)
+    session['nonce'] = nonce
+    # Kirim nonce saat authorize
+    return oauth.google.authorize_redirect(redirect_uri, nonce=nonce)
+
+# Rute callback setelah login dari Google
+@app.route('/authorize/google')
+def authorize_google():
+    token = oauth.google.authorize_access_token()
+    # Ambil nonce dari session untuk validasi
+    nonce = session.get('nonce')
+    # Gunakan nonce saat mem-parsing token
+    user_claims = oauth.google.parse_id_token(token, nonce=nonce)
 
     if user_claims:
         provider_id = user_claims['sub']
