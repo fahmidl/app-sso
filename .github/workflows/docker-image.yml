@@ -48,3 +48,17 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      # 5. Men-deploy ke server
+      - name: Deploy to Server
+        # Hanya berjalan jika push ke branch 'main'
+        if: github.ref == 'refs/heads/main'
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/azureuser/app-sso
+            docker compose pull
+            docker compose up -d
