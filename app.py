@@ -4,6 +4,7 @@ from flask import Flask, url_for, redirect, session, render_template
 from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 # Memuat environment variables
 load_dotenv()
