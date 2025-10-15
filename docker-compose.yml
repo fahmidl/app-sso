@@ -1,12 +1,26 @@
 version: '3.8'
 
 services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # Mount file konfigurasi Nginx
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      # Mount folder SSL
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - webapp # Pastikan nginx dimulai setelah webapp
+    restart: always
+
   # Service untuk aplikasi web Flask
   webapp:
     # build: . 
     image: fahmidl/app-sso:latest
-    ports:
-      - "5000:5000"
+    # ports:
+    #   - "5000:5000"
     # volumes:
     #   - .:/app
     env_file:
@@ -15,6 +29,7 @@ services:
       - db
     # Perintah ini akan diteruskan ke 'exec "$@"' di dalam entrypoint.sh
     command: ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
+    restart: always
 
   # Service untuk database PostgreSQL
   db:
@@ -25,8 +40,9 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
-    ports:
-      - "5432:5432"
+    # ports:
+    #   - "5432:5432"
+    restart: always
 
 volumes:
   postgres_data:

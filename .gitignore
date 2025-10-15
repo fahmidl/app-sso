@@ -38,3 +38,8 @@ Thumbs.db
 
 # Ignore entrypoint script backup
 entrypoint.sh.bak
+# SSL / Nginx
+*.crt
+*.pem
+*.key
+nginx.conf

@@ -20,3 +20,8 @@ users.db
 Dockerfile
 docker-compose.yml
 .dockerignore
+# SSL / Nginx
+*.crt
+*.pem
+*.key
+nginx.conf
